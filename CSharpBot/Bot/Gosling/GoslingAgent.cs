@@ -15,9 +15,9 @@ namespace Bot.Gosling
     /// </summary>
     public class GoslingAgent : RLBotDotNet.Bot
     {
-        private List<CarObject> friends = new();
-        private List<CarObject> foes = new();
-        private CarObject me;
+        public List<CarObject> Friends = new();
+        public List<CarObject> Foes = new();
+        public CarObject Me;
 
         // Porting note: the original GoslingUtils code makes a new class for Ball and GameInfo for easier abstraction
         // (similar to CarObject, BoostObject, GoalObject). We don't need this in the C# code because it comes with nice
@@ -26,18 +26,18 @@ namespace Bot.Gosling
         // abstractions. CarObject's equivalent is Player but it doesn't have a Local method so we choose to create that
         // abstraction.
 
-        private Ball ball;
-        private GameInfo gameInfo;
-        private List<BoostObject> boosts = new();
-        private GoalObject friendGoal;
-        private GoalObject foeGoal;
+        public Ball Ball;
+        public GameInfo GameInfo;
+        public readonly List<BoostObject> boosts = new();
+        public GoalObject FriendGoal;
+        public GoalObject FoeGoal;
 
-        private Stack<IRoutine> stack;
-        private float time;
-        private bool ready = false;
+        public Stack<IRoutine> Stack;
+        public float Time;
+        public bool Ready = false;
 
-        private Controller controller = new();
-        private bool kickoffFlag = false;
+        public Controller Controller = new();
+        public bool KickoffFlag = false;
 
         public GoslingAgent(string name, int team, int index) : base(name, team, index)
         {
@@ -45,9 +45,9 @@ namespace Bot.Gosling
             // type of abstraction as friendGoal and foeGoal. These fields (ball and gameInfo) will get set in the
             // Preprocess() method instead, when we have actual information about the ball and game.
 
-            me = new CarObject(index);
-            friendGoal = new GoalObject(team);
-            foeGoal = new GoalObject(1 - team);
+            Me = new CarObject(index);
+            FriendGoal = new GoalObject(team);
+            FoeGoal = new GoalObject(1 - team);
         }
 
         private void GetReady(Packet packet)
@@ -59,8 +59,8 @@ namespace Bot.Gosling
                 boosts.Add(new BoostObject(i, boost.Location, boost.IsFullBoost));
             }
 
-            ball = packet.Ball;
-            ready = true;
+            Ball = packet.Ball;
+            Ready = true;
         }
 
         /// <summary>
@@ -69,14 +69,14 @@ namespace Bot.Gosling
         /// </summary>
         void RefreshPlayerLists(Packet packet)
         {
-            friends.Clear();
-            foes.Clear();
+            Friends.Clear();
+            Foes.Clear();
             for (int i = 0; i < packet.Players.Length; i++)
             {
                 if (packet.Players[i].Team == team && i != index)
-                    friends.Add(new CarObject(i, packet));
+                    Friends.Add(new CarObject(i, packet));
                 if (packet.Players[i].Team != team)
-                    foes.Add(new CarObject(i, packet));
+                    Foes.Add(new CarObject(i, packet));
             }
         }
 
@@ -96,11 +96,11 @@ namespace Bot.Gosling
         /// </summary>
         void DebugStack()
         {
-            var enumerator = stack.GetEnumerator();
-            for (int i = 0; i < stack.Count; i++)
+            var enumerator = Stack.GetEnumerator();
+            for (int i = 0; i < Stack.Count; i++)
             {
                 var text = enumerator.Current.GetType().Name;
-                var upperLeft = new Vector2(10, 50 + 50 * (stack.Count - i));
+                var upperLeft = new Vector2(10, 50 + 50 * (Stack.Count - i));
                 Renderer.DrawString2D(text, Colors.White, upperLeft, 3, 3);
 
                 enumerator.MoveNext();
@@ -115,28 +115,28 @@ namespace Bot.Gosling
         void Preprocess(Packet packet)
         {
             // Calling the update functions for all of the objects
-            if (packet.Players.Length != friends.Count + foes.Count + 1)
+            if (packet.Players.Length != Friends.Count + Foes.Count + 1)
                 RefreshPlayerLists(packet);
 
-            foreach (var car in friends)
+            foreach (var car in Friends)
                 car.Update(packet);
-            foreach (var car in foes)
+            foreach (var car in Foes)
                 car.Update(packet);
             foreach (var pad in boosts)
                 pad.Update(packet);
 
-            ball = packet.Ball;
-            me.Update(packet);
-            gameInfo = packet.GameInfo;
-            time = packet.GameInfo.SecondsElapsed;
+            Ball = packet.Ball;
+            Me.Update(packet);
+            GameInfo = packet.GameInfo;
+            Time = packet.GameInfo.SecondsElapsed;
 
             // When a new kickoff begins we empty the stack
             var isKickoff = packet.GameInfo.IsRoundActive && packet.GameInfo.IsKickoffPause;
-            if (!kickoffFlag && isKickoff)
-                stack.Clear();
+            if (!KickoffFlag && isKickoff)
+                Stack.Clear();
 
             // Tells us when to go for kickoff
-            kickoffFlag = isKickoff;
+            KickoffFlag = isKickoff;
         }
 
         public override Controller GetOutput(rlbot.flat.GameTickPacket gameTickPacket)
@@ -144,10 +144,10 @@ namespace Bot.Gosling
             Packet packet = new Packet(gameTickPacket);
 
             // Reset controller
-            controller = new();
+            Controller = new();
 
             // Get ready, then preprocess
-            if (!ready)
+            if (!Ready)
                 GetReady(packet);
             Preprocess(packet);
 
@@ -157,11 +157,11 @@ namespace Bot.Gosling
             Run();
 
             // Run the routine on the end of the stack
-            if (stack.Count > 0)
-                stack.Peek().Run(this);
+            if (Stack.Count > 0)
+                Stack.Peek().Run(this);
 
             // Send our updated controller back to RLBot
-            return controller;
+            return Controller;
         }
 
         protected virtual void Run()
