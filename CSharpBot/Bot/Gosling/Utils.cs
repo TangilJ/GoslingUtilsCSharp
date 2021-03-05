@@ -66,6 +66,59 @@ namespace Bot.Gosling
         }
 
         /// <summary>
+        /// Determines if a point is inside the standard soccer field.
+        /// </summary>
+        public static bool InField(Vector3 point, float radius)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Finds the slope of your car's position relative to the shot vector (shot vector is y axis).
+        /// </summary>
+        public static float FindSlope(Vector3 shotVector, Vector3 carToTarget)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// This function returns target locations that are corrected to account for the ball's radius.
+        /// It also checks to make sure the ball can fit between the corrected locations.
+        /// </summary>
+        public static void PostCorrection(Vector3 ballLocation, Vector3 leftTarget, Vector3 rightTarget)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns the two roots of a quadratic
+        /// </summary>
+        public static (float, float) Quadratic(float a, float b, float c)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns true if the ball is still where the shot anticipates it to be.
+        /// First finds the two closest slices in the ball prediction to shot's intercept_time
+        /// threshold controls the tolerance we allow the ball to be off by.
+        /// </summary>
+        public static bool ShotValid(GoslingAgent agent, float threshold = 45)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns -1 for blue team and 1 for orange team.
+        /// </summary>
+        public static float Side(float x)
+        {
+            if (x == 0)
+                return -1;
+            return 1;
+        }
+
+        /// <summary>
         /// Returns the sign of a number, -1, 0, +1
         /// </summary>
         public static float Sign(float x)
@@ -83,6 +136,46 @@ namespace Bot.Gosling
         public static float SteerPd(float angle, float rate)
         {
             return Cap((float) Math.Pow(35 * (angle + rate), 3) / 10, -1, 1);
+        }
+
+        /// <summary>
+        /// Linearly interpolate from a to b using t.
+        /// For instance, when t == 0, a is returned, and when t == 1, b is returned.
+        /// Works for both numbers and Vector3s.
+        /// </summary>
+        public static float Lerp(float a, float b, float t)
+        {
+            return (b - a) * t + a;
+        }
+
+        /// <summary>
+        /// Linearly interpolate from a to b using t.
+        /// For instance, when t == 0, a is returned, and when t == 1, b is returned.
+        /// Works for both numbers and Vector3s.
+        /// </summary>
+        public static Vector3 Lerp(Vector3 a, Vector3 b, float t)
+        {
+            return (b - a) * t + a;
+        }
+
+        /// <summary>
+        /// Inverse linear interpolation from a to b with value v.
+        /// For instance, it returns 0 if v == a, and returns 1 if v == b, and returns 0.5 if v is exactly between a and b.
+        /// Works for both numbers and Vector3s.
+        /// </summary>
+        public static float InvLerp(float a, float b, float v)
+        {
+            return (v - a) / (b - a);
+        }
+
+        /// <summary>
+        /// Inverse linear interpolation from a to b with value v.
+        /// For instance, it returns 0 if v == a, and returns 1 if v == b, and returns 0.5 if v is exactly between a and b.
+        /// Works for both numbers and Vector3s.
+        /// </summary>
+        public static Vector3 InvLerp(Vector3 a, Vector3 b, Vector3 v)
+        {
+            return (v - a) / (b - a);
         }
     }
 }
