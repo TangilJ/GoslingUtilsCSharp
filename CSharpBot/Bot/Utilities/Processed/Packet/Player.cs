@@ -6,6 +6,7 @@ namespace Bot.Utilities.Processed.Packet
         public bool DoubleJumped;
         public bool HasWheelContact;
         public bool IsSupersonic;
+        public bool IsDemolished;
         public bool Jumped;
         public string Name;
         public Physics Physics;
@@ -15,6 +16,7 @@ namespace Bot.Utilities.Processed.Packet
         {
             Physics = new Physics(playerInfo.Physics.Value);
             IsSupersonic = playerInfo.IsSupersonic;
+            IsDemolished = playerInfo.IsDemolished;
             HasWheelContact = playerInfo.HasWheelContact;
             Jumped = playerInfo.Jumped;
             DoubleJumped = playerInfo.DoubleJumped;
