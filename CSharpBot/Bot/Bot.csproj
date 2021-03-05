@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="Gosling\GoslingAgent.cs" />
     <Compile Include="Gosling\Objects\BoostObject.cs" />
     <Compile Include="Gosling\Objects\GoalObject.cs" />
     <Compile Include="Gosling\Objects\IObject.cs" />
