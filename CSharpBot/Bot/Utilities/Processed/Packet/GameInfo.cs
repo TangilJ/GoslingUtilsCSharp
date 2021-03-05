@@ -5,12 +5,14 @@ namespace Bot.Utilities.Processed.Packet
         public float SecondsElapsed;
         public float GameTimeRemaining;
         public bool IsKickoffPause;
+        public bool IsRoundActive;
 
         public GameInfo(rlbot.flat.GameInfo gameInfo)
         {
             SecondsElapsed = gameInfo.SecondsElapsed;
             GameTimeRemaining = gameInfo.GameTimeRemaining;
             IsKickoffPause = gameInfo.IsKickoffPause;
+            IsRoundActive = gameInfo.IsRoundActive;
         }
     }
 }
