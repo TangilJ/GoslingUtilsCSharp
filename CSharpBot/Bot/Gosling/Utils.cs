@@ -70,15 +70,29 @@ namespace Bot.Gosling
         /// </summary>
         public static bool InField(Vector3 point, float radius)
         {
-            throw new NotImplementedException();
+            point = new Vector3(Math.Abs(point.X), Math.Abs(point.Y), Math.Abs(point.Z));
+            if (point.X > 4080 - radius)
+                return false;
+            if (point.Y > 5900 - radius)
+                return false;
+            if (point.X > 880 - radius && point.Y > 5105 - radius)
+                return false;
+            if (point.X > 2650 && point.Y > -point.X + 8025 - radius)
+                return false;
+            return true;
         }
 
         /// <summary>
         /// Finds the slope of your car's position relative to the shot vector (shot vector is y axis).
+        /// 10 = you are on the axis and the ball is between you and the direction to shoot in
+        /// -10 = you are on the wrong side
+        /// 1.0 = you're about 45 degrees offcenter
         /// </summary>
         public static float FindSlope(Vector3 shotVector, Vector3 carToTarget)
         {
-            throw new NotImplementedException();
+            var d = Vector3.Dot(shotVector, carToTarget);
+            var e = Math.Abs(Vector3.Dot(Vector3.Cross(shotVector, Vector3.UnitZ), carToTarget));
+            return Cap(e != 0 ? d / e : 10 * Sign(d), -3, 3);
         }
 
         /// <summary>
@@ -95,7 +109,10 @@ namespace Bot.Gosling
         /// </summary>
         public static (float, float) Quadratic(float a, float b, float c)
         {
-            throw new NotImplementedException();
+            var inside = (float) Math.Sqrt(b * b - 4 * a * c);
+            if (a != 0)
+                return ((-b + inside) / (2 * a), (-b - inside) / (2 * a));
+            return (-1, 1);
         }
 
         /// <summary>
