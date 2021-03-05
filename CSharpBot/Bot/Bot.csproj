@@ -81,6 +81,7 @@
     <Compile Include="Gosling\Routines\Atba.cs" />
     <Compile Include="Gosling\Routines\IRoutine.cs" />
     <Compile Include="Gosling\Routines\Kickoff.cs" />
+    <Compile Include="Gosling\Tools.cs" />
     <Compile Include="Gosling\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
