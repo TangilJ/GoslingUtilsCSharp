@@ -1,9 +1,10 @@
 ﻿namespace Bot.Gosling.Routines
 {
     /// <summary>
-    /// An example routine that just drives towards the ball at max speed.
+    /// Drives towards a designated (stationary) target.
+    /// Optional vector controls where the car should be pointing upon reaching the target.
     /// </summary>
-    public class Atba : IRoutine
+    public class GoTo : IRoutine
     {
         public void Run(GoslingAgent agent)
         {

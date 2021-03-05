@@ -1,9 +1,10 @@
 ﻿namespace Bot.Gosling.Routines
 {
     /// <summary>
-    /// An example routine that just drives towards the ball at max speed.
+    /// Hits a target point at a target time towards a target direction.
+    /// Target must be no higher than 300uu unless you're feeling lucky. 
     /// </summary>
-    public class Atba : IRoutine
+    public class JumpShot : IRoutine
     {
         public void Run(GoslingAgent agent)
         {
