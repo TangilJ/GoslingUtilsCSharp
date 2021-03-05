@@ -79,6 +79,7 @@
     <Compile Include="Gosling\Objects\GoalObject.cs" />
     <Compile Include="Gosling\Objects\IObject.cs" />
     <Compile Include="Gosling\Routines\IRoutine.cs" />
+    <Compile Include="Gosling\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\DataConversion.cs" />
