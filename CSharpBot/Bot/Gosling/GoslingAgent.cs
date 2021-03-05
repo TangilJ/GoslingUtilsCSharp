@@ -15,15 +15,16 @@ namespace Bot.Gosling
     /// </summary>
     public class GoslingAgent : RLBotDotNet.Bot
     {
-        private List<Player> friends = new();
-        private List<Player> foes = new();
-        private Player me;
+        private List<CarObject> friends = new();
+        private List<CarObject> foes = new();
+        private CarObject me;
 
         // Porting note: the original GoslingUtils code makes a new class for Ball and GameInfo for easier abstraction
-        // (similar to BoostObject and GoalObject). We don't need this in the C# code because it comes with nice
+        // (similar to CarObject, BoostObject, GoalObject). We don't need this in the C# code because it comes with nice
         // structures for Ball and GameInfo by default with the example bot template.
         // However, there are no equivalents to BoostObject and GoalObject by default, so we need to create those
-        // abstractions.
+        // abstractions. CarObject's equivalent is Player but it doesn't have a Local method so we choose to create that
+        // abstraction.
 
         private Ball ball;
         private GameInfo gameInfo;
@@ -44,6 +45,7 @@ namespace Bot.Gosling
             // type of abstraction as friendGoal and foeGoal. These fields (ball and gameInfo) will get set in the
             // Preprocess() method instead, when we have actual information about the ball and game.
 
+            me = new CarObject(index);
             friendGoal = new GoalObject(team);
             foeGoal = new GoalObject(1 - team);
         }
@@ -56,13 +58,27 @@ namespace Bot.Gosling
                 var boost = fieldInfo.BoostPads[i];
                 boosts.Add(new BoostObject(i, boost.Location, boost.IsFullBoost));
             }
-            
+
             ball = packet.Ball;
             ready = true;
         }
 
-        // Porting note: at this point of the code, the original has a method called refresh_player_lists. We don't need
-        // this because we are refreshing the player lists anyway in every Preprocess call.
+        /// <summary>
+        /// Makes new friend/foe lists
+        /// Useful to keep separate from GetReady because humans can join/leave a match
+        /// </summary>
+        void RefreshPlayerLists(Packet packet)
+        {
+            friends.Clear();
+            foes.Clear();
+            for (int i = 0; i < packet.Players.Length; i++)
+            {
+                if (packet.Players[i].Team == team && i != index)
+                    friends.Add(new CarObject(i, packet));
+                if (packet.Players[i].Team != team)
+                    foes.Add(new CarObject(i, packet));
+            }
+        }
 
         // Porting note: at this point of the code, the original has 2 convenience methods to push and pop the stack.
         // We don't need that in the C# version because we use an actual Stack data structure instead of using a List
@@ -89,6 +105,7 @@ namespace Bot.Gosling
 
                 enumerator.MoveNext();
             }
+
             enumerator.Dispose();
         }
 
@@ -98,25 +115,18 @@ namespace Bot.Gosling
         void Preprocess(Packet packet)
         {
             // Calling the update functions for all of the objects
-            
-            // Porting note: we don't update the car objects because we use Player. Therefore, we just get new instances
-            // of the friends and foes instead.
-            friends.Clear();
-            foes.Clear();
-            for (int i = 0; i < packet.Players.Length; i++)
-            {
-                if (i == index)
-                    me = packet.Players[i];
-                else if (packet.Players[i].Team == team)
-                    friends.Add(packet.Players[i]);
-                else
-                    foes.Add(packet.Players[i]);
-            }
+            if (packet.Players.Length != friends.Count + foes.Count + 1)
+                RefreshPlayerLists(packet);
 
+            foreach (var car in friends)
+                car.Update(packet);
+            foreach (var car in foes)
+                car.Update(packet);
             foreach (var pad in boosts)
                 pad.Update(packet);
 
             ball = packet.Ball;
+            me.Update(packet);
             gameInfo = packet.GameInfo;
             time = packet.GameInfo.SecondsElapsed;
 
