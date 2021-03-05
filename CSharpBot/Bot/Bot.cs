@@ -1,57 +1,40 @@
 ﻿using System.Numerics;
-using System.Windows.Media;
-using Bot.Utilities.Processed.BallPrediction;
-using Bot.Utilities.Processed.FieldInfo;
-using Bot.Utilities.Processed.Packet;
 using RLBotDotNet;
+using Bot.Gosling;
+using Bot.Gosling.Routines;
 
 namespace Bot
 {
-    // We want to our bot to derive from Bot, and then implement its abstract methods.
-    class Bot : RLBotDotNet.Bot
+    class Bot : GoslingAgent
     {
-        // We want the constructor for our Bot to extend from RLBotDotNet.Bot, but we don't want to add anything to it.
-        // You might want to add logging initialisation or other types of setup up here before the bot starts.
         public Bot(string botName, int botTeam, int botIndex) : base(botName, botTeam, botIndex) { }
 
-        public override Controller GetOutput(rlbot.flat.GameTickPacket gameTickPacket)
+        // Porting note: the original code calls the first parameter "agent" instead of "self". In C#, the equivalent of
+        // self/agent is "this" and it doesn't appear as the first parameter of a method.
+        protected override void Run()
         {
-            // We process the gameTickPacket and convert it to our own internal data structure.
-            Packet packet = new Packet(gameTickPacket);
+            // An example of using raw utilities:
 
-            // Get the data required to drive to the ball.
-            Vector3 ballLocation = packet.Ball.Physics.Location;
-            Vector3 carLocation = packet.Players[index].Physics.Location;
-            Orientation carRotation = packet.Players[index].Physics.Rotation;
+            var relativeTarget = Ball.Physics.Location - Me.Location;
+            // Porting note: In the original code, the first part is agent.ball.location. We use Ball instead of another
+            // abstraction, so we need to access .Physics before getting the Location.
+            // Also, in C# we can also skip out writing "this." if there are no ambiguities, so we can skip out on the
+            // "agent." part as well.
 
-            // Find where the ball is relative to us.
-            Vector3 ballRelativeLocation = Orientation.RelativeLocation(carLocation, ballLocation, carRotation);
-
-            // Decide which way to steer in order to get to the ball.
-            // If the ball is to our left, we steer left. Otherwise we steer right.
-            float steer;
-            if (ballRelativeLocation.Y > 0)
-                steer = 1;
-            else
-                steer = -1;
+            var localTarget = Me.Local(relativeTarget);
             
-            // Examples of rendering in the game
-            Renderer.DrawString3D("Ball", Colors.Black, ballLocation, 3, 3);
-            Renderer.DrawString3D(steer > 0 ? "Right" : "Left", Colors.Aqua, carLocation, 3, 3);
-            Renderer.DrawLine3D(Colors.Red, carLocation, ballLocation);
+            // Porting note: 
+            Utils.DefaultPd(this, localTarget);
+            Utils.DefaultThrottle(this, 2300);
             
-            // This controller will contain all the inputs that we want the bot to perform.
-            return new Controller
+            // An example of pushing routines to the stack:
+            if (Stack.Count < 1)
             {
-                // Set the throttle to 1 so the bot can move.
-                Throttle = 1,
-                Steer = steer
-            };
+                if (KickoffFlag)
+                    Stack.Push(new Kickoff());
+                else
+                    Stack.Push(new Atba());
+            }
         }
-        
-        // Hide the old methods that return Flatbuffers objects and use our own methods that
-        // use processed versions of those objects instead.
-        internal new FieldInfo GetFieldInfo() => new FieldInfo(base.GetFieldInfo());
-        internal new BallPrediction GetBallPrediction() => new BallPrediction(base.GetBallPrediction());
     }
 }
