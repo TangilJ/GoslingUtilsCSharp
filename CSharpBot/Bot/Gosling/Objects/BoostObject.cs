@@ -8,21 +8,21 @@ namespace Bot.Gosling.Objects
     /// </summary>
     public class BoostObject : IObject
     {
-        public int index;
-        public Vector3 location;
-        public bool active;
-        public bool large;
+        public readonly int Index;
+        public readonly Vector3 Location;
+        public bool Active;
+        public readonly bool Large;
 
         public BoostObject(int index, Vector3 location, bool large)
         {
-            this.index = index;
-            this.location = location;
-            this.large = large;
+            Index = index;
+            Location = location;
+            Large = large;
         }
 
         public void Update(Packet packet)
         {
-            active = packet.BoostPadStates[index].IsActive;
+            Active = packet.BoostPadStates[Index].IsActive;
         }
     }
 }

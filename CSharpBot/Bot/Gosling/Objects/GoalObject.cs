@@ -8,19 +8,19 @@ namespace Bot.Gosling.Objects
     /// </summary>
     public class GoalObject : IObject
     {
-        public Vector3 location;
+        public readonly Vector3 Location;
 
-        public Vector3 leftPost;
-        public Vector3 rightPost;
+        public readonly Vector3 LeftPost;
+        public readonly Vector3 RightPost;
 
         public GoalObject(int team)
         {
             team = team == 1 ? 1 : -1;
-            location = new Vector3(0, team * 5100, 320);
+            Location = new Vector3(0, team * 5100, 320);
 
             // Posts are closer to x=750, but this allows the bot to be a little more accurate
-            leftPost = new Vector3(team * 850, team * 5100, 320);
-            rightPost = new Vector3(-team * 850, team * 5100, 320);
+            LeftPost = new Vector3(team * 850, team * 5100, 320);
+            RightPost = new Vector3(-team * 850, team * 5100, 320);
         }
 
         public void Update(Packet packet) { }
