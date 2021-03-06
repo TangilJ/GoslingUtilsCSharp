@@ -12,7 +12,7 @@ namespace Bot.Gosling
         /// <summary>
         /// Sets the Z component of the Vector3 to 0
         /// </summary>
-        public static Vector3 Flatten(this Vector3 v) => new Vector3(v.X, v.Y, 0);
+        public static Vector3 Flatten(this Vector3 v) => new(v.X, v.Y, 0);
 
         /// <summary>
         /// Returns the angle between this Vector3 and another Vector3.
@@ -31,5 +31,10 @@ namespace Bot.Gosling
                     )
                 );
         }
+
+        /// <summary>
+        /// Porting note: returns the Vector3 where all components have their absolute value.
+        /// </summary>
+        public static Vector3 Abs(this Vector3 v) => new(Math.Abs(v.X), Math.Abs(v.Y), Math.Abs(v.Z));
     }
 }
