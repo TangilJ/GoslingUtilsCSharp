@@ -28,11 +28,11 @@ namespace Bot.Gosling
 
         public Ball Ball;
         public GameInfo GameInfo;
-        public readonly List<BoostObject> boosts = new();
+        public readonly List<BoostObject> Boosts = new();
         public GoalObject FriendGoal;
         public GoalObject FoeGoal;
 
-        public Stack<IRoutine> Stack;
+        public Stack<IRoutine> Stack = new();
         public float Time;
         public bool Ready = false;
 
@@ -56,7 +56,7 @@ namespace Bot.Gosling
             for (int i = 0; i < fieldInfo.BoostPads.Length; i++)
             {
                 var boost = fieldInfo.BoostPads[i];
-                boosts.Add(new BoostObject(i, boost.Location, boost.IsFullBoost));
+                Boosts.Add(new BoostObject(i, boost.Location, boost.IsFullBoost));
             }
 
             Ball = packet.Ball;
@@ -122,7 +122,7 @@ namespace Bot.Gosling
                 car.Update(packet);
             foreach (var car in Foes)
                 car.Update(packet);
-            foreach (var pad in boosts)
+            foreach (var pad in Boosts)
                 pad.Update(packet);
 
             Ball = packet.Ball;
