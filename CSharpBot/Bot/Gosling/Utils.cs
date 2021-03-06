@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Bot.Gosling.Objects;
+using Bot.Gosling.Routines;
 
 namespace Bot.Gosling
 {
@@ -99,9 +100,41 @@ namespace Bot.Gosling
         /// This function returns target locations that are corrected to account for the ball's radius.
         /// It also checks to make sure the ball can fit between the corrected locations.
         /// </summary>
-        public static void PostCorrection(Vector3 ballLocation, Vector3 leftTarget, Vector3 rightTarget)
+        public static (Vector3, Vector3, bool) PostCorrection(
+            Vector3 ballLocation, Vector3 leftTarget, Vector3 rightTarget
+        )
         {
-            throw new NotImplementedException();
+            // We purposely make this a bit larger so that our shots have a higher chance of success
+            const int ballRadius = 110;
+
+            var goalLinePerp = Vector3.Cross(rightTarget - leftTarget, Vector3.UnitZ);
+            var leftAdjusted =
+                leftTarget +
+                Vector3.Cross(Vector3.Normalize(leftTarget - ballLocation), -Vector3.UnitZ)
+                * ballRadius;
+            var rightAdjusted =
+                rightTarget +
+                Vector3.Cross(Vector3.Normalize(rightTarget - ballLocation), Vector3.UnitZ)
+                * ballRadius;
+            var leftCorrected =
+                Vector3.Dot(leftAdjusted - leftTarget, goalLinePerp) > 0
+                    ? leftTarget
+                    : leftAdjusted;
+            var rightCorrected =
+                Vector3.Dot(rightAdjusted - rightTarget, goalLinePerp) > 0
+                    ? leftTarget
+                    : rightAdjusted;
+
+            var newGoal = rightCorrected - leftCorrected;
+            var newGoalLine = Vector3.Normalize(newGoal);
+            var newGoalWidth = newGoal.Length();
+            var newGoalPerp = Vector3.Cross(newGoalLine, Vector3.UnitZ);
+            
+            var goalCenter = leftCorrected + (newGoalLine * newGoalWidth * 0.5f);
+            var ballToGoal = Vector3.Normalize(goalCenter - ballLocation);
+            var ballFits = newGoalWidth * Math.Abs(Vector3.Dot(newGoalPerp, ballToGoal)) > ballRadius * 2;
+            
+            return (leftCorrected, rightCorrected, ballFits);
         }
 
         /// <summary>
@@ -120,9 +153,34 @@ namespace Bot.Gosling
         /// First finds the two closest slices in the ball prediction to shot's intercept_time
         /// threshold controls the tolerance we allow the ball to be off by.
         /// </summary>
-        public static bool ShotValid(GoslingAgent agent, float threshold = 45)
+        public static bool ShotValid(GoslingAgent agent, IShotRoutine shot, float threshold = 45)
         {
-            throw new NotImplementedException();
+            var slices = agent.GetBallPrediction().Slices;
+            int soonest = 0;
+            int latest = slices.Length - 1;
+            
+            // Porting note: the original code reads `while len(slices[soonest:latest+1]) > 2`. This seems to be a
+            // contrived and less efficient way of just checking `while latest + 1 - soonest > 2`.
+            while (latest + 1 - soonest > 2)
+            {
+                int midpoint = (soonest + latest) / 2;
+                if (slices[midpoint].GameSeconds > shot.InterceptTime)
+                    latest = midpoint;
+                else
+                    soonest = midpoint;
+            }
+            
+            // Preparing to interpolate between the selected slices
+
+            var dt = slices[latest].GameSeconds - slices[soonest].GameSeconds;
+            var timeFromSoonest = shot.InterceptTime - slices[soonest].GameSeconds;
+            var slopes = (slices[latest].Physics.Location - slices[soonest].Physics.Location) * (1 / dt);
+            
+            // Determining exactly where the ball will be at the given shot's intercept_time
+            var predictedBallLocation = slices[soonest].Physics.Location + (slopes * timeFromSoonest);
+            
+            // Comparing predicted location with where the shot expects the ball to be
+            return (shot.BallLocation - predictedBallLocation).Length() < threshold;
         }
 
         /// <summary>
