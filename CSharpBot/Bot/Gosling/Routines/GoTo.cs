@@ -57,14 +57,14 @@ namespace Bot.Gosling.Routines
 
             var velocity = 1 + agent.Me.Velocity.Length();
             if (distanceRemaining < 350)
-                agent.Stack.Pop();
+                agent.Pop();
             else if (Math.Abs(angleY) < 0.05 && velocity > 600 && velocity < 2150 &&
                      distanceRemaining / velocity > 2)
-                agent.Stack.Push(new Flip(localTarget));
+                agent.Push(new Flip(localTarget));
             else if (Math.Abs(angleY) > 2.8 && velocity < 200)
-                agent.Stack.Push(new Flip(localTarget, cancel: true));
+                agent.Push(new Flip(localTarget, cancel: true));
             else if (agent.Me.Airborne)
-                agent.Stack.Push(new Recovery(target));
+                agent.Push(new Recovery(target));
         }
     }
 }

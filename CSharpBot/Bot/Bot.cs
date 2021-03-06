@@ -31,9 +31,9 @@ namespace Bot
             if (Stack.Count < 1)
             {
                 if (KickoffFlag)
-                    Stack.Push(new Kickoff());
+                    Push(new Kickoff());
                 else
-                    Stack.Push(new Atba());
+                    Push(new Atba());
             }
         }
     }

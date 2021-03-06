@@ -54,8 +54,8 @@ namespace Bot.Gosling.Routines
             
             if (Math.Abs(angleY) < 0.05 && (eta < 0.45 || distance < 150))
             {
-                agent.Stack.Pop();
-                agent.Stack.Push(new Flip(agent.Me.Local(carToBall)));
+                agent.Pop();
+                agent.Push(new Flip(agent.Me.Local(carToBall)));
             }
         }
     }

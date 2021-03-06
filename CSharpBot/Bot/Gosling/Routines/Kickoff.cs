@@ -16,9 +16,9 @@ namespace Bot.Gosling.Routines
             Utils.DefaultThrottle(agent, 2300);
             if (localTarget.Length() < 650)
             {
-                agent.Stack.Pop();
+                agent.Pop();
                 // Flip towards opponent goal
-                agent.Stack.Push(new Flip(agent.Me.Local(agent.FoeGoal.Location - agent.Me.Location)));
+                agent.Push(new Flip(agent.Me.Local(agent.FoeGoal.Location - agent.Me.Location)));
             }   
         }
     }

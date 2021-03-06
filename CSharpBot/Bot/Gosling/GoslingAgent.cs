@@ -81,10 +81,15 @@ namespace Bot.Gosling
             }
         }
 
-        // Porting note: at this point of the code, the original has 2 convenience methods to push and pop the stack.
-        // We don't need that in the C# version because we use an actual Stack data structure instead of using a List
-        // like the original, so we don't need any convenience methods.
-        // Permalink to original: https://github.com/ddthj/GoslingUtils/blob/733b6b05bc9cab8da596d6ed324fbfbf179100a0/objects.py#L54-L60
+        /// <summary>
+        /// Shorthand for adding a routine to the stack
+        /// </summary>
+        public void Push(IRoutine routine) => Stack.Push(routine);
+
+        /// <summary>
+        /// Shorthand for removing a routine from the stack, returns the routine
+        /// </summary>
+        public IRoutine Pop() => Stack.Pop();
 
         public void Line(Vector3 start, Vector3 end, Color? color = null)
         {
@@ -110,8 +115,10 @@ namespace Bot.Gosling
             enumerator.Dispose();
         }
 
-        // Porting note: here the original code has a convenience method, clear(), for the stack that we don't need.
-        // See the comments above for explanations.
+        /// <summary>
+        /// Shorthand for clearing the stack of all routines
+        /// </summary>
+        public void Clear() => Stack.Clear();
 
         private void Preprocess(Packet packet)
         {

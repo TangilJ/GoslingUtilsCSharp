@@ -26,7 +26,7 @@ namespace Bot.Gosling.Routines
             Utils.DefaultPd(agent, localTarget);
             agent.Controller.Throttle = 1;
             if (!agent.Me.Airborne)
-                agent.Stack.Pop();
+                agent.Pop();
         }
     }
 }

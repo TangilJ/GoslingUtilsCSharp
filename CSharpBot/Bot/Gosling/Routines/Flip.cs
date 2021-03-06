@@ -58,8 +58,8 @@ namespace Bot.Gosling.Routines
             }
             else
             {
-                agent.Stack.Pop();
-                agent.Stack.Push(new Recovery());
+                agent.Pop();
+                agent.Push(new Recovery());
             }
         }
     }
