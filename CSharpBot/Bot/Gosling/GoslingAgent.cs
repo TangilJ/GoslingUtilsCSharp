@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Windows.Media;
 using Bot.Gosling.Objects;
 using Bot.Gosling.Routines;
+using Bot.Utilities.Processed.BallPrediction;
 using Bot.Utilities.Processed.FieldInfo;
 using Bot.Utilities.Processed.Packet;
 using RLBotDotNet;
@@ -169,12 +170,14 @@ namespace Bot.Gosling
             // Override this with your strategy code
         }
 
-        // Porting note: the following GetFieldInfo hiding is not in the original code, because there is no need to do
-        // it in Python. For C# we really need to convert the rlbot.flat.FieldInfo object into the nicer to use
-        // structure provided in the example bot. In fact, this code is taken from the example bot template.
+        // Porting note: the following GetFieldInfo and GetBallPrediction hiding is not in the original code, because
+        // there is no need to do it in Python. For C#, we really need to convert the rlbot.flat.FieldInfo and
+        // rlbot.flat.BallPrediction objects into the nicer-to-use structures provided in the example bot.
+        // In fact, this code is taken from the example bot template.
 
         // Hide the old methods that return Flatbuffers objects and use our own methods that
         // use processed versions of those objects instead.
         internal new FieldInfo GetFieldInfo() => new FieldInfo(base.GetFieldInfo());
+        internal new BallPrediction GetBallPrediction() => new BallPrediction(base.GetBallPrediction());
     }
 }
