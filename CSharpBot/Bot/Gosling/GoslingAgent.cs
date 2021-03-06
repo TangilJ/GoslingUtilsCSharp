@@ -68,7 +68,7 @@ namespace Bot.Gosling
         /// Makes new friend/foe lists
         /// Useful to keep separate from GetReady because humans can join/leave a match
         /// </summary>
-        void RefreshPlayerLists(Packet packet)
+        private void RefreshPlayerLists(Packet packet)
         {
             Friends.Clear();
             Foes.Clear();
@@ -86,7 +86,7 @@ namespace Bot.Gosling
         // like the original, so we don't need any convenience methods.
         // Permalink to original: https://github.com/ddthj/GoslingUtils/blob/733b6b05bc9cab8da596d6ed324fbfbf179100a0/objects.py#L54-L60
 
-        void Line(Vector3 start, Vector3 end, Color? color = null)
+        public void Line(Vector3 start, Vector3 end, Color? color = null)
         {
             color ??= Colors.White;
             Renderer.DrawLine3D(color.Value, start, end);
@@ -95,7 +95,7 @@ namespace Bot.Gosling
         /// <summary>
         /// Draws the stack on the screen
         /// </summary>
-        void DebugStack()
+        public void DebugStack()
         {
             var enumerator = Stack.GetEnumerator();
             for (int i = 0; i < Stack.Count; i++)
@@ -113,7 +113,7 @@ namespace Bot.Gosling
         // Porting note: here the original code has a convenience method, clear(), for the stack that we don't need.
         // See the comments above for explanations.
 
-        void Preprocess(Packet packet)
+        private void Preprocess(Packet packet)
         {
             // Calling the update functions for all of the objects
             if (packet.Players.Length != Friends.Count + Foes.Count + 1)
