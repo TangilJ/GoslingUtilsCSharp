@@ -18,6 +18,10 @@ been touched and some utility methods need to be completed.
 If you would like to help complete the port, please feel free to make a pull request. If you have any questions, don't
 hesitate to ask via the Issues tab on this repo or on Discord.
 
+Note that this port is based on commit
+[733b6b0](https://github.com/ddthj/GoslingUtils/commit/733b6b05bc9cab8da596d6ed324fbfbf179100a0) of the original
+repository.
+
 ## Porting notes
 
 This C# version is mostly a 1-to-1 port of the original Python implementation. However, there are differences where it
@@ -51,4 +55,5 @@ There are a number of things that are left to be done for this port:
 * Possibly create a more idiomatic version of this port with intentionally different design decisions to fit C# better
 
 ## Requirements
+
 This project was tested on .NET Framework v4.6.1. Your mileage may vary on newer versions like .NET 5.
