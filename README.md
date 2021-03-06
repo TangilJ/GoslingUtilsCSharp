@@ -19,7 +19,7 @@ If you would like to help complete the port, please feel free to make a pull req
 hesitate to ask via the Issues tab on this repo or on Discord.
 
 Note that this port is based on commit
-[733b6b0](https://github.com/ddthj/GoslingUtils/commit/733b6b05bc9cab8da596d6ed324fbfbf179100a0) of the original
+[733b6b0](https://github.com/ddthj/GoslingUtils/tree/733b6b05bc9cab8da596d6ed324fbfbf179100a0) of the original
 repository.
 
 ## Porting notes
