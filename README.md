@@ -41,13 +41,12 @@ There are a number of things that are left to be done for this port:
 
 ### Must
 
+* Copy all comments from the original implementation
 * Complete all the implementations for the routines
-* Complete the method in Tools
-* Complete the methods in Utils
 
 ### Should
 
-* Write down the differences between the port and the original
+* Write down the architectural differences between the port and the original in the README
 * Create a port of Gosling using these ported utilities
 
 ### Could
