@@ -1,4 +1,6 @@
-﻿namespace Bot.Gosling.Routines
+﻿using System.Numerics;
+
+namespace Bot.Gosling.Routines
 {
     /// <summary>
     /// Point towards our velocity vector and land upright, unless we aren't moving very fast.
@@ -6,9 +8,25 @@
     /// </summary>
     public class Recovery : IRoutine
     {
+        private Vector3? target;
+
+        public Recovery(Vector3? target = null)
+        {
+            this.target = target;
+        }
+
         public void Run(GoslingAgent agent)
         {
-            throw new System.NotImplementedException();
+            Vector3 localTarget;
+            if (target.HasValue)
+                localTarget = agent.Me.Local((target - agent.Me.Location).Value.Flatten());
+            else
+                localTarget = agent.Me.Local(agent.Me.Velocity.Flatten());
+
+            Utils.DefaultPd(agent, localTarget);
+            agent.Controller.Throttle = 1;
+            if (!agent.Me.Airborne)
+                agent.Stack.Pop();
         }
     }
 }

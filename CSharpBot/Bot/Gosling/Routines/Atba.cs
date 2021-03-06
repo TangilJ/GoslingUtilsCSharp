@@ -7,7 +7,10 @@
     {
         public void Run(GoslingAgent agent)
         {
-            throw new System.NotImplementedException();
+            var relativeTarget = agent.Ball.Physics.Location - agent.Me.Location;
+            var localTarget = agent.Me.Local(relativeTarget);
+            Utils.DefaultPd(agent, localTarget);
+            Utils.DefaultThrottle(agent, 2300);
         }
     }
 }
