@@ -84,6 +84,7 @@
     <Compile Include="Gosling\Routines\GoTo.cs" />
     <Compile Include="Gosling\Routines\GoToBoost.cs" />
     <Compile Include="Gosling\Routines\IRoutine.cs" />
+    <Compile Include="Gosling\Routines\IShotRoutine.cs" />
     <Compile Include="Gosling\Routines\JumpShot.cs" />
     <Compile Include="Gosling\Routines\Kickoff.cs" />
     <Compile Include="Gosling\Routines\Recovery.cs" />
