@@ -69,8 +69,8 @@ namespace Bot.Gosling.Routines
                 agent.Pop();
             else if (agent.Me.Airborne)
                 agent.Push(new Recovery(target));
-            else if (Math.Abs(angleY) < 0.05 && velocity > 600 && velocity < 2150 && distanceRemaining / velocity > 2 
-                || adjustment < 90 && carToTarget / velocity > 2.0)
+            else if (Math.Abs(angleY) < 0.05 && velocity > 600 && velocity < 2150 && distanceRemaining / velocity > 2
+                     || adjustment < 90 && carToTarget / velocity > 2.0)
                 agent.Push(new Flip(localTarget));
         }
     }

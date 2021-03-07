@@ -19,7 +19,7 @@ namespace Bot.Gosling.Routines
                 agent.Pop();
                 // Flip towards opponent goal
                 agent.Push(new Flip(agent.Me.Local(agent.FoeGoal.Location - agent.Me.Location)));
-            }   
+            }
         }
     }
 }

@@ -129,11 +129,11 @@ namespace Bot.Gosling
             var newGoalLine = Vector3.Normalize(newGoal);
             var newGoalWidth = newGoal.Length();
             var newGoalPerp = Vector3.Cross(newGoalLine, Vector3.UnitZ);
-            
+
             var goalCenter = leftCorrected + (newGoalLine * newGoalWidth * 0.5f);
             var ballToGoal = Vector3.Normalize(goalCenter - ballLocation);
             var ballFits = newGoalWidth * Math.Abs(Vector3.Dot(newGoalPerp, ballToGoal)) > ballRadius * 2;
-            
+
             return (leftCorrected, rightCorrected, ballFits);
         }
 
@@ -158,7 +158,7 @@ namespace Bot.Gosling
             var slices = agent.GetBallPrediction().Slices;
             int soonest = 0;
             int latest = slices.Length - 1;
-            
+
             // Porting note: the original code reads `while len(slices[soonest:latest+1]) > 2`. This seems to be a
             // contrived and less efficient way of just checking `while latest + 1 - soonest > 2`.
             while (latest + 1 - soonest > 2)
@@ -169,16 +169,16 @@ namespace Bot.Gosling
                 else
                     soonest = midpoint;
             }
-            
+
             // Preparing to interpolate between the selected slices
 
             var dt = slices[latest].GameSeconds - slices[soonest].GameSeconds;
             var timeFromSoonest = shot.InterceptTime - slices[soonest].GameSeconds;
             var slopes = (slices[latest].Physics.Location - slices[soonest].Physics.Location) * (1 / dt);
-            
+
             // Determining exactly where the ball will be at the given shot's intercept_time
             var predictedBallLocation = slices[soonest].Physics.Location + (slopes * timeFromSoonest);
-            
+
             // Comparing predicted location with where the shot expects the ball to be
             return (shot.BallLocation - predictedBallLocation).Length() < threshold;
         }

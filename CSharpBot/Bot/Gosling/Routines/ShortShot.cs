@@ -51,7 +51,7 @@ namespace Bot.Gosling.Routines
             );
             agent.Controller.Boost = agent.Me.Airborne || Math.Abs(angleY) > 0.3 ? false : agent.Controller.Boost;
             agent.Controller.Handbrake = Math.Abs(angleY) > 2.3 || agent.Controller.Handbrake;
-            
+
             if (Math.Abs(angleY) < 0.05 && (eta < 0.45 || distance < 150))
             {
                 agent.Pop();

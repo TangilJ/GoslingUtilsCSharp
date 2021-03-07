@@ -22,11 +22,11 @@ namespace Bot
             // "agent." part as well.
 
             var localTarget = Me.Local(relativeTarget);
-            
+
             // Porting note: 
             Utils.DefaultPd(this, localTarget);
             Utils.DefaultThrottle(this, 2300);
-            
+
             // An example of pushing routines to the stack:
             if (Stack.Count < 1)
             {
