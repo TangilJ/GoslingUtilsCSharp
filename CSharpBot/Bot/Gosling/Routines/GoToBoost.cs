@@ -29,7 +29,7 @@ namespace Bot.Gosling.Routines
             agent.Line(
                 boost.Location - new Vector3(0, 0, 500),
                 boost.Location + new Vector3(0, 0, 500),
-                Color.FromRgb(0, 255, 0)
+                Colors.Lime
             );
 
             float adjustment;

@@ -88,8 +88,7 @@ namespace Bot.Gosling.Routines
             // Drawing debug lines to show the dodge point and final target (which differs due to the adjustment)
             agent.Line(agent.Me.Location, intercept);
             agent.Line(intercept - new Vector3(0, 0, 100), intercept + new Vector3(0, 0, 100), Colors.Red);
-            agent.Line(finalTarget - new Vector3(0, 0, 100), finalTarget + new Vector3(0, 0, 100),
-                Color.FromRgb(0, 255, 0));
+            agent.Line(finalTarget - new Vector3(0, 0, 100), finalTarget + new Vector3(0, 0, 100), Colors.Lime);
 
             var (angleX, angleY, _) = Utils.DefaultPd(agent, localTarget);
 
