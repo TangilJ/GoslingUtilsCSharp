@@ -114,7 +114,7 @@ namespace Bot.Gosling.Routines
             agent.Line(agent.Ball.Physics.Location, agent.Ball.Physics.Location + (shotVector * 300));
 
             // Calling our drive utils to get us going towards the final target
-            var (_ angleY, _) = Utils.DefaultPd(agent, localFinalTarget, direction);
+            var (_, angleY, _) = Utils.DefaultPd(agent, localFinalTarget, direction);
             Utils.DefaultThrottle(agent, speedRequired, direction);
 
             agent.Line(agent.Me.Location, agent.Me.Location + (shotVector * 200), Colors.White);
