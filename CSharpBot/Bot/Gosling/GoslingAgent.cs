@@ -34,11 +34,11 @@ namespace Bot.Gosling
         public GoalObject FoeGoal;
 
         public Stack<IRoutine> Stack = new();
-        public float Time;
-        public bool Ready = false;
+        public float Time; // Game time
+        public bool Ready = false; // Whether or not GoslingAgent has run its get_ready() function
 
-        public Controller Controller = new();
-        public bool KickoffFlag = false;
+        public Controller Controller = new(); // The controller that is returned to the framework after every tick
+        public bool KickoffFlag = false; // A flag that tells us when kickoff is happening
 
         public GoslingAgent(string name, int team, int index) : base(name, team, index)
         {
@@ -51,6 +51,9 @@ namespace Bot.Gosling
             FoeGoal = new GoalObject(1 - team);
         }
 
+        /// <summary>
+        /// Preps all of the objects that will be updated during play.
+        /// </summary>
         private void GetReady(Packet packet)
         {
             var fieldInfo = GetFieldInfo();
@@ -65,8 +68,8 @@ namespace Bot.Gosling
         }
 
         /// <summary>
-        /// Makes new friend/foe lists
-        /// Useful to keep separate from GetReady because humans can join/leave a match
+        /// Makes new friend/foe lists.<br/>
+        /// Useful to keep separate from GetReady because humans can join/leave a match.
         /// </summary>
         private void RefreshPlayerLists(Packet packet)
         {
